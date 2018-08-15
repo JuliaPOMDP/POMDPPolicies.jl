@@ -32,5 +32,5 @@ solver that produces a random policy
 mutable struct RandomSolver <: Solver
     rng::AbstractRNG
 end
-RandomSolver(;rng=Base.GLOBAL_RNG) = RandomSolver(rng)
+RandomSolver(;rng=Random.GLOBAL_RNG) = RandomSolver(rng)
 solve(solver::RandomSolver, problem::Union{POMDP,MDP}) = RandomPolicy(solver.rng, problem, VoidUpdater())

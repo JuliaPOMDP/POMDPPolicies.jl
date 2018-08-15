@@ -1,13 +1,14 @@
 module POMDPPolicies
 
+using LinearAlgebra
+using Random
+using StatsBase # for Weights
+
 using POMDPs
 import POMDPs: action, value, solve, updater
 
 using BeliefUpdaters
 using POMDPModelTools: ordered_actions
-
-using Random
-using StatsBase # for Weights
 
 export
     AlphaVectorPolicy

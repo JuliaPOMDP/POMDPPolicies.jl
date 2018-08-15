@@ -1,4 +1,6 @@
 using Test
+using POMDPPolicies
+using POMDPs
 using BeliefUpdaters
 using POMDPModels
 

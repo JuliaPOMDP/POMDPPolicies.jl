@@ -1,7 +1,7 @@
 pomdp = BabyPOMDP()
 
 bu = DiscreteUpdater(pomdp)
-b0 = initialize_belief(bu, initial_state_distribution(pomdp))
+b0 = initialize_belief(bu, initialstate_distribution(pomdp))
 
 # these values were gotten from FIB.jl
 alphas = [-29.4557 -36.5093; -19.4557 -16.0629]
