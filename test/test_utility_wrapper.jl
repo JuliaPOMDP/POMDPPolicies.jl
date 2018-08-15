@@ -3,7 +3,7 @@ let
 
     mdp = GridWorld()
     policy = RandomPolicy(mdp)
-    counts = Dict(a=>0 for a in iterator(actions(mdp)))
+    counts = Dict(a=>0 for a in actions(mdp))
 
     # with a payload
     statswrapper = PolicyWrapper(policy, payload=counts) do policy, counts, s
