@@ -22,7 +22,7 @@ let
         a = try
             a = action(policy, s)
         catch ex
-            warn("Caught error in policy; using default")
+            @warn("Caught error in policy; using default")
             a = :left
         end
         return a

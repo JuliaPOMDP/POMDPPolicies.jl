@@ -35,7 +35,7 @@ If there is no payload, it will be called with two argments: the policy and the 
         try
             a = action(policy, s)
         catch ex
-            warn("Caught error in policy; using default")
+            @warn("Caught error in policy; using default")
             a = :left
         end
         return a
