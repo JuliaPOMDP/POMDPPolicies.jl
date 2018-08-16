@@ -33,4 +33,4 @@ mutable struct RandomSolver <: Solver
     rng::AbstractRNG
 end
 RandomSolver(;rng=Random.GLOBAL_RNG) = RandomSolver(rng)
-solve(solver::RandomSolver, problem::Union{POMDP,MDP}) = RandomPolicy(solver.rng, problem, VoidUpdater())
+solve(solver::RandomSolver, problem::Union{POMDP,MDP}) = RandomPolicy(solver.rng, problem, NothingUpdater())
