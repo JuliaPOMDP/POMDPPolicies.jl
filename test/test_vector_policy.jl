@@ -7,12 +7,12 @@ let
 
     p = solve(solver, gw)
 
-    for s in states(gw)
-        @test action(p, s) == GridWorldAction(:left)
+    for s1 in states(gw)
+        @test action(p, s1) == GridWorldAction(:left)
     end
 
     p2 = VectorPolicy(gw, pvec)
-    for s in states(gw)
-        @test action(p2, s) == GridWorldAction(:left)
+    for s2 in states(gw)
+        @test action(p2, s2) == GridWorldAction(:left)
     end
 end
