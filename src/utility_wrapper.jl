@@ -16,7 +16,7 @@ If there is no payload, it will be called with two argments: the policy and the 
 
     mdp = GridWorld()
     policy = RandomPolicy(mdp)
-    counts = Dict(a=>0 for a in iterator(actions(mdp)))
+    counts = Dict(a=>0 for a in actions(mdp))
 
     # with a payload
     statswrapper = PolicyWrapper(policy, payload=counts) do policy, counts, s
@@ -46,7 +46,7 @@ If there is no payload, it will be called with two argments: the policy and the 
 mutable struct PolicyWrapper{P<:Policy, F<:Function, PL} <: Policy
     f::F
     policy::P
-    payload::Union{Nothing,PL}
+    payload::PL
 end
 
 function PolicyWrapper(f::Function, policy::Policy; payload=nothing)

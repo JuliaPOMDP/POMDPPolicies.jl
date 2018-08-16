@@ -3,7 +3,7 @@ let
 
     mdp = GridWorld()
     policy = RandomPolicy(mdp)
-    counts = Dict(a=>0 for a in iterator(actions(mdp)))
+    counts = Dict(a=>0 for a in actions(mdp))
 
     # with a payload
     statswrapper = PolicyWrapper(policy, payload=counts) do policy, counts, s
@@ -19,7 +19,7 @@ let
 
     # without a payload
     errwrapper = PolicyWrapper(policy) do policy, s
-        try
+        a = try
             a = action(policy, s)
         catch ex
             warn("Caught error in policy; using default")

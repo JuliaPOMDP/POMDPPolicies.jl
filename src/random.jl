@@ -11,7 +11,7 @@ end
 # The constructor below should be used to create the policy so that the action space is initialized correctly
 RandomPolicy(problem::Union{POMDP,MDP};
              rng=Random.GLOBAL_RNG,
-             updater=VoidUpdater()) = RandomPolicy(rng, problem, updater)
+             updater=NothingUpdater()) = RandomPolicy(rng, problem, updater)
 
 ## policy execution ##
 function action(policy::RandomPolicy, s)

@@ -6,11 +6,11 @@ solver = VectorSolver(pvec)
 
 p = solve(solver, gw)
 
-for s in iterator(states(gw))
+for s in states(gw)
     @test action(p, s) == GridWorldAction(:left)
 end
 
 p2 = VectorPolicy(gw, pvec)
-for s in iterator(states(gw))
+for s in states(gw)
     @test action(p2, s) == GridWorldAction(:left)
 end
