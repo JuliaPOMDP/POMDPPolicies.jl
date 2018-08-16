@@ -1,7 +1,7 @@
 name = "POMDPPolicies"
 uuid = "fd2a78ec-a0b2-11e8-254f-71ff51514d6b"
 authors = ["rejuvyesh <mail@rejuvyesh.com>"]
-version = "0.1.0"
+version = "0.0.0"
 
 [deps]
 BeliefUpdaters = "449812bc-a0b5-11e8-3863-0db9323dc191"
