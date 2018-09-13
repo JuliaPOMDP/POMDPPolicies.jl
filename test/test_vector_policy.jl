@@ -1,5 +1,5 @@
 let
-    gw = GridWorld(sx=2, sy=2, rs=[GridWorldState(1,1)], rv=[10.0])
+    gw = LegacyGridWorld(sx=2, sy=2, rs=[GridWorldState(1,1)], rv=[10.0])
 
     pvec = fill(GridWorldAction(:left), 5)
 

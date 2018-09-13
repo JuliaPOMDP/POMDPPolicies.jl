@@ -1,7 +1,7 @@
 let
     using POMDPModels
 
-    mdp = GridWorld()
+    mdp = LegacyGridWorld()
     policy = RandomPolicy(mdp)
     counts = Dict(a=>0 for a in actions(mdp))
 
