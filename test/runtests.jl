@@ -4,6 +4,7 @@ using POMDPs
 using BeliefUpdaters
 using POMDPSimulators
 using POMDPModels
+using Random
 
 @testset "alpha" begin
     include("test_alpha_policy.jl")
@@ -19,4 +20,7 @@ end
 end
 @testset "vector" begin
     include("test_vector_policy.jl")
+end
+@testset "random" begin
+    include("test_random_solver.jl")
 end
