@@ -2,7 +2,7 @@ let
 
 using POMDPModels
 
-problem = GridWorld()
+problem = LegacyGridWorld()
 
 policy = UniformRandomPolicy(problem)
 sim = RolloutSimulator(max_steps=10)
