@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Utility Wrapper · POMDPPolicies.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>POMDPPolicies.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="alpha_vector.html">Alpha Vector Policy</a></li><li><a class="toctext" href="function.html">Function</a></li><li><a class="toctext" href="index.html">About</a></li><li><a class="toctext" href="random.html">Random Policy</a></li><li><a class="toctext" href="stochastic.html">Stochastic Policies</a></li><li class="current"><a class="toctext" href="utility_wrapper.html">Utility Wrapper</a><ul class="internal"></ul></li><li><a class="toctext" href="vector.html">Vector Policy</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href="utility_wrapper.html">Utility Wrapper</a></li></ul><a class="edit-page" href="https://github.com/JuliaPOMDP/POMDPPolicies.jl/blob/master/docs/src/utility_wrapper.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Utility Wrapper</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Utility-Wrapper-1" href="#Utility-Wrapper-1">Utility Wrapper</a></h1><p>A wrapper for policies to collect statistics and handle errors.</p><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="POMDPPolicies.PolicyWrapper" href="#POMDPPolicies.PolicyWrapper"><code>POMDPPolicies.PolicyWrapper</code></a> — <span class="docstring-category">Type</span>.</div><div><div><pre><code class="language-none">PolicyWrapper</code></pre><p>Flexible utility wrapper for a policy designed for collecting statistics about planning.</p><p>Carries a function, a policy, and optionally a payload (that can be any type).</p><p>The function should typically be defined with the do syntax. Each time <code>action</code> is called on the wrapper, this function will be called.</p><p>If there is no payload, it will be called with two argments: the policy and the state/belief. If there is a payload, it will be called with three arguments: the policy, the payload, and the current state or belief. The function should return an appropriate action. The idea is that, in this function, <code>action(policy, s)</code> should be called, statistics from the policy/planner should be collected and saved in the payload, exceptions can be handled, and the action should be returned.</p><p>Constructor</p><p><code>PolicyWrapper(policy::Policy; payload=nothing)</code></p><p><strong>Example</strong></p><pre><code class="language-julia">using POMDPModels
+using POMDPToolbox
+
+mdp = GridWorld()
+policy = RandomPolicy(mdp)
+counts = Dict(a=&gt;0 for a in actions(mdp))
+
+# with a payload
+statswrapper = PolicyWrapper(policy, payload=counts) do policy, counts, s
+    a = action(policy, s)
+    counts[a] += 1
+    return a
+end
+
+h = simulate(HistoryRecorder(max_steps=100), mdp, statswrapper)
+for (a, count) in payload(statswrapper)
+    println(&quot;policy chose action $a $count of $(n_steps(h)) times.&quot;)
+end
+
+# without a payload
+errwrapper = PolicyWrapper(policy) do policy, s
+    try
+        a = action(policy, s)
+    catch ex
+        @warn(&quot;Caught error in policy; using default&quot;)
+        a = :left
+    end
+    return a
+end
+
+h = simulate(HistoryRecorder(max_steps=100), mdp, errwrapper)</code></pre><p><strong>Fields</strong></p><ul><li><code>f::F</code></li><li><code>policy::P</code></li><li><code>payload::PL</code></li></ul></div></div><a class="source-link" target="_blank" href="https://github.com/JuliaPOMDP/POMDPPolicies.jl/blob/93bf1731c12e1a75e55a610ba95c082df4418a35/src/utility_wrapper.jl#L1-L56">source</a></section><footer><hr/><a class="previous" href="stochastic.html"><span class="direction">Previous</span><span class="title">Stochastic Policies</span></a><a class="next" href="vector.html"><span class="direction">Next</span><span class="title">Vector Policy</span></a></footer></article></body></html>
