@@ -1,6 +1,19 @@
 ### StochasticPolicy ###
 # maintained by @etotheipluspi
 
+"""
+   StochasticPolicy{D, RNG <: AbstractRNG}
+
+Represents a stochastic policy. Action are sampled from an arbitrary distribution.
+
+Constructor:
+
+    `StochasticPolicy(distribution; rng=Random.GLOBAL_RNG)`
+
+# Fields 
+- `distribution::D`
+- `rng::RNG` a random number generator
+""" 
 mutable struct StochasticPolicy{D, RNG <: AbstractRNG} <: Policy
     distribution::D
     rng::RNG
@@ -19,7 +32,19 @@ updater(policy::StochasticPolicy) = VoidUpdater() # since the stochastic policy 
 # Samples actions uniformly
 UniformRandomPolicy(problem, rng=Random.GLOBAL_RNG) = StochasticPolicy(actions(problem), rng)
 
+"""
+    CategoricalTabularPolicy
 
+represents a stochastic policy sampling an action from a categorical distribution with weights given by a `ValuePolicy`
+
+constructor:
+
+`CategoricalTabularPolicy(mdp::Union{POMDP,MDP}; rng=Random.GLOBAL_RNG)`
+
+# Fields
+- `stochastic::StochasticPolicy`
+- `value::ValuePolicy`
+"""
 mutable struct CategoricalTabularPolicy <: Policy
     stochastic::StochasticPolicy
     value::ValuePolicy
@@ -31,7 +56,15 @@ function action(policy::CategoricalTabularPolicy, s)
     return policy.value.act[sample(policy.stochastic.rng, policy.stochastic.distribution)]
 end
 
+"""
+    EpsGreedyPolicy
 
+represents an epsilon greedy policy, sampling a random action with a probability `eps` or sampling from a given stochastic policy otherwise.
+
+constructor:
+
+`EpsGreedyPolicy(mdp::Union{MDP,POMDP}, eps::Float64; rng=Random.GLOBAL_RNG)`
+"""
 mutable struct EpsGreedyPolicy <: Policy
     eps::Float64
     val::ValuePolicy

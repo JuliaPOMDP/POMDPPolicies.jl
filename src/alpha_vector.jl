@@ -4,6 +4,22 @@
 # implements policy that is a set of alpha vectors
 ######################################################################
 
+"""
+    AlphaVectorPolicy{P<:POMDP, A}
+
+Represents a policy with a set of alpha vector 
+
+Constructor: 
+
+    `AlphaVectorPolicy(pomdp::POMDP, alphas)`
+
+alphas can be a matrix or a vector of vectors
+
+# Fields
+- `pomdp::P` the POMDP problem 
+- `alphas::Vector{Vector{Float64}}` the list of alpha vectors
+- `action_map::Vector{A}` a list of action corresponding to the alpha vectors
+"""
 struct AlphaVectorPolicy{P<:POMDP, A} <: Policy
     pomdp::P
     alphas::Vector{Vector{Float64}}
