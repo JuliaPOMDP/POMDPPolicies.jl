@@ -12,10 +12,11 @@ let
     # initial belief is 100% confidence in baby not being hungry
     @test isapprox(value(policy, b0), -16.0629)
     @test isapprox(value(policy, [1.0,0.0]), -16.0629)
-
+    @test isapprox(action_values(policy, b0), [-16.0629, -19.4557])
+    
     # because baby isn't hungry, policy should not feed (return false)
     @test action(policy, b0) == false
-
+     
     # try pushing new vector
     push!(policy, [0.0,0.0], true)
 

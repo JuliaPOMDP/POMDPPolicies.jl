@@ -56,3 +56,5 @@ function ValuePolicy(mdp::Union{MDP,POMDP}, value_table = zeros(n_states(mdp), n
 end
 
 action(p::ValuePolicy, s) = p.act[argmax(p.value_table[stateindex(p.mdp, s),:])]
+
+action_values(p::ValuePolicy, s) = p.value_table[stateindex(p.mdp, s), :]
