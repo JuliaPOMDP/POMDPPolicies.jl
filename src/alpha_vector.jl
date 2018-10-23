@@ -63,7 +63,7 @@ function action(p::AlphaVectorPolicy, b::DiscreteBelief)
     return p.action_map[best_idx]
 end
 
-function action_values(p::AlphaVectorPolicy, b::DiscreteBelief)
+function actionvalues(p::AlphaVectorPolicy, b::DiscreteBelief)
     num_vectors = length(p.alphas)
     max_values = -Inf*ones(n_actions(p.pomdp))
     for i = 1:num_vectors

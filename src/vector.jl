@@ -57,4 +57,4 @@ end
 
 action(p::ValuePolicy, s) = p.act[argmax(p.value_table[stateindex(p.mdp, s),:])]
 
-action_values(p::ValuePolicy, s) = p.value_table[stateindex(p.mdp, s), :]
+actionvalues(p::ValuePolicy, s) = p.value_table[stateindex(p.mdp, s), :]
