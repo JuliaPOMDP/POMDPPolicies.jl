@@ -63,6 +63,19 @@ function action(p::AlphaVectorPolicy, b::DiscreteBelief)
     return p.action_map[best_idx]
 end
 
+function actionvalues(p::AlphaVectorPolicy, b::DiscreteBelief)
+    num_vectors = length(p.alphas)
+    max_values = -Inf*ones(n_actions(p.pomdp))
+    for i = 1:num_vectors
+        temp_value = dot(b.b, p.alphas[i])
+        ai = actionindex(p.pomdp, p.action_map[i]) 
+        if temp_value > max_values[ai]
+            max_values[ai] = temp_value
+        end
+    end
+    return max_values
+end
+
 function Base.push!(p::AlphaVectorPolicy, alpha::Vector{Float64}, a)
     push!(p.alphas, alpha)
     push!(p.action_map, a)

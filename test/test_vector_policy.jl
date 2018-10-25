@@ -15,4 +15,9 @@ let
     for s2 in states(gw)
         @test action(p2, s2) == GridWorldAction(:left)
     end
+
+    p3 = ValuePolicy(gw)
+    for s2 in states(gw)
+        @inferred(action(p3, s2)) isa GridWorldAction
+    end
 end

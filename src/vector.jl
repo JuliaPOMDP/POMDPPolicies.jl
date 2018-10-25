@@ -15,7 +15,6 @@ mutable struct VectorPolicy{S,A} <: Policy
 end
 
 action(p::VectorPolicy, s) = p.act[stateindex(p.mdp, s)]
-action(p::VectorPolicy, s, a) = action(p, s)
 
 """
     VectorSolver{A}
@@ -36,23 +35,23 @@ end
 """
      ValuePolicy{P<:Union{POMDP,MDP}, T<:AbstractMatrix{Float64}, A}
 A generic MDP policy that consists of a value table. The entry at `stateindex(mdp, s)` is the action that will be taken in state `s`.
+It is expected that the order of the actions in the value table is consistent with the order of the actions in `act`. 
+If `act` is not explicitly set in the construction, `act` is ordered according to `actionindex`.
 
 # Fields 
 - `mdp::P` the MDP problem
 - `value_table::T` the value table as a |S|x|A| matrix
 - `act::Vector{A}` the possible actions
 """
-mutable struct ValuePolicy{P<:Union{POMDP,MDP}, T<:AbstractMatrix{Float64}, A} <: Policy
+struct ValuePolicy{P<:Union{POMDP,MDP}, T<:AbstractMatrix{Float64}, A} <: Policy
     mdp::P
     value_table::T
     act::Vector{A}
 end
 function ValuePolicy(mdp::Union{MDP,POMDP}, value_table = zeros(n_states(mdp), n_actions(mdp)))
-    acts = Any[]
-    for a in actions(mdp)
-        push!(acts, a)
-    end
-    return ValuePolicy(mdp, value_table, acts)
+    return ValuePolicy(mdp, value_table, ordered_actions(mdp))
 end
 
 action(p::ValuePolicy, s) = p.act[argmax(p.value_table[stateindex(p.mdp, s),:])]
+
+actionvalues(p::ValuePolicy, s) = p.value_table[stateindex(p.mdp, s), :]

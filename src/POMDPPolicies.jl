@@ -10,6 +10,16 @@ import POMDPs: action, value, solve, updater
 using BeliefUpdaters
 using POMDPModelTools: ordered_actions
 
+"""
+    actionvalues(p::Policy, s)
+
+returns the values of each action at state s in a vector
+"""
+function actionvalues end
+
+export 
+    actionvalues
+
 export
     AlphaVectorPolicy
 
