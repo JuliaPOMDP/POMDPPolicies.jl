@@ -197,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Vector Policy",
     "title": "POMDPPolicies.ValuePolicy",
     "category": "type",
-    "text": " ValuePolicy{P<:Union{POMDP,MDP}, T<:AbstractMatrix{Float64}, A}\n\nA generic MDP policy that consists of a value table. The entry at stateindex(mdp, s) is the action that will be taken in state s.\n\nFields\n\nmdp::P the MDP problem\nvalue_table::T the value table as a |S|x|A| matrix\nact::Vector{A} the possible actions\n\n\n\n\n\n"
+    "text": " ValuePolicy{P<:Union{POMDP,MDP}, T<:AbstractMatrix{Float64}, A}\n\nA generic MDP policy that consists of a value table. The entry at stateindex(mdp, s) is the action that will be taken in state s. It is expected that the order of the actions in the value table is consistent with the order of the actions in act.  If act is not explicitly set in the construction, act is ordered according to actionindex.\n\nFields\n\nmdp::P the MDP problem\nvalue_table::T the value table as a |S|x|A| matrix\nact::Vector{A} the possible actions\n\n\n\n\n\n"
 },
 
 {
