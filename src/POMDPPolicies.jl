@@ -8,7 +8,7 @@ using POMDPs
 import POMDPs: action, value, solve, updater
 
 using BeliefUpdaters
-using POMDPModelTools: ordered_actions
+using POMDPModelTools
 
 """
     actionvalues(p::Policy, s)

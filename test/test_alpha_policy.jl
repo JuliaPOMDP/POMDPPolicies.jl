@@ -13,9 +13,16 @@ let
     @test isapprox(value(policy, b0), -16.0629)
     @test isapprox(value(policy, [1.0,0.0]), -16.0629)
     @test isapprox(actionvalues(policy, b0), [-16.0629, -19.4557])
-    
+   
     # because baby isn't hungry, policy should not feed (return false)
     @test action(policy, b0) == false
+
+    # SparseCat belief
+    sparse_b0 = SparseCat([s for s in ordered_states(pomdp) if pdf(b0, s) != 0.],
+                        b0.b[b0.b .> 0.])
+    @test isapprox(value(policy, sparse_b0), -16.0629)
+    @test isapprox(actionvalues(policy, sparse_b0), [-16.0629, -19.4557])
+    @test action(policy, sparse_b0) == false
      
     # try pushing new vector
     push!(policy, [0.0,0.0], true)
