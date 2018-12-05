@@ -3,6 +3,7 @@ using POMDPPolicies
 using POMDPs
 using BeliefUpdaters
 using POMDPSimulators
+using POMDPModelTools
 using POMDPModels
 using Random
 

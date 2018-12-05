@@ -76,6 +76,47 @@ function actionvalues(p::AlphaVectorPolicy, b::DiscreteBelief)
     return max_values
 end
 
+function value(p::AlphaVectorPolicy, b::SparseCat)
+    maximum(sparsecat_dot(p.pomdp, a, b) for a in p.alphas)
+end
+
+function action(p::AlphaVectorPolicy, b::SparseCat)
+    num_vectors = length(p.alphas)
+    best_idx = 1
+    max_value = -Inf
+    for i = 1:num_vectors
+        temp_value = sparsecat_dot(p.pomdp, p.alphas[i], b)
+        if temp_value > max_value
+            max_value = temp_value
+            best_idx = i
+        end
+    end
+    return p.action_map[best_idx]
+end
+    
+function actionvalues(p::AlphaVectorPolicy, b::SparseCat)
+    num_vectors = length(p.alphas)
+    max_values = -Inf*ones(n_actions(p.pomdp))
+    for i = 1:num_vectors
+        temp_value = sparsecat_dot(p.pomdp, p.alphas[i], b)
+        ai = actionindex(p.pomdp, p.action_map[i])
+        if ( temp_value > max_values[ai])
+            max_values[ai] = temp_value
+        end
+    end
+    return max_values
+ end
+ 
+# perform dot product between an alpha vector and a sparse cat object
+function sparsecat_dot(problem::POMDP, alpha::Vector{Float64}, b::SparseCat)
+   val = 0.
+   for (s, p) in weighted_iterator(b)
+       si = stateindex(problem, s)
+       val += alpha[si]*p
+   end
+   return val
+end
+
 function Base.push!(p::AlphaVectorPolicy, alpha::Vector{Float64}, a)
     push!(p.alphas, alpha)
     push!(p.action_map, a)
