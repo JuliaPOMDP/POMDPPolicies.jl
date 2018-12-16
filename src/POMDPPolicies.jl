@@ -3,6 +3,7 @@ module POMDPPolicies
 using LinearAlgebra
 using Random
 using StatsBase # for Weights
+using SparseArrays # for sparse vectors in alpha_vector.jl
 
 using POMDPs
 import POMDPs: action, value, solve, updater
