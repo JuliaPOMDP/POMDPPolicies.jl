@@ -23,6 +23,10 @@ let
     @test isapprox(value(policy, sparse_b0), -16.0629)
     @test isapprox(actionvalues(policy, sparse_b0), [-16.0629, -19.4557])
     @test action(policy, sparse_b0) == false
+
+    # Bool_distribution (if it works for this, it should work for an arbitrary distribution)
+    bd = initialstate_distribution(pomdp)::BoolDistribution
+    @test action(policy, bd) == false 
      
     # try pushing new vector
     push!(policy, [0.0,0.0], true)
