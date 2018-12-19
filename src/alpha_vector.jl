@@ -1,13 +1,7 @@
-######################################################################
-# alpha_vector.jl
-#
-# implements policy that is a set of alpha vectors
-######################################################################
-
 """
     AlphaVectorPolicy{P<:POMDP, A}
 
-Represents a policy with a set of alpha vector 
+Represents a policy with a set of alpha vectors 
 
 Constructor: 
 
@@ -28,7 +22,8 @@ end
 function AlphaVectorPolicy(pomdp::POMDP, alphas)
     AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
 end
-# assumes alphas is |S| x |A|
+
+# assumes alphas is |S| x (number of alpha vecs)
 function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
     # turn alphas into vector of vectors
     num_actions = size(alphas, 2)
@@ -44,17 +39,21 @@ end
 
 updater(p::AlphaVectorPolicy) = DiscreteUpdater(p.pomdp)
 
-value(p::AlphaVectorPolicy, b::DiscreteBelief) = value(p, b.b)
-function value(p::AlphaVectorPolicy, b::Vector{Float64})
-    maximum(dot(b,a) for a in p.alphas)
+
+# The three functions below rely on beliefvec being implemented for the belief type 
+# Implementations of beliefvec are below
+function value(p::AlphaVectorPolicy, b)
+    bvec = beliefvec(p.pomdp, b)
+    maximum(dot(bvec,a) for a in p.alphas)
 end
 
-function action(p::AlphaVectorPolicy, b::DiscreteBelief)
+function action(p::AlphaVectorPolicy, b)
+    bvec = beliefvec(p.pomdp, b)
     num_vectors = length(p.alphas)
     best_idx = 1
     max_value = -Inf
     for i = 1:num_vectors
-        temp_value = dot(b.b, p.alphas[i])
+        temp_value = dot(bvec, p.alphas[i])
         if temp_value > max_value
             max_value = temp_value
             best_idx = i
@@ -63,11 +62,12 @@ function action(p::AlphaVectorPolicy, b::DiscreteBelief)
     return p.action_map[best_idx]
 end
 
-function actionvalues(p::AlphaVectorPolicy, b::DiscreteBelief)
+function actionvalues(p::AlphaVectorPolicy, b)
+    bvec = beliefvec(p.pomdp, b)
     num_vectors = length(p.alphas)
     max_values = -Inf*ones(n_actions(p.pomdp))
     for i = 1:num_vectors
-        temp_value = dot(b.b, p.alphas[i])
+        temp_value = dot(bvec, p.alphas[i])
         ai = actionindex(p.pomdp, p.action_map[i]) 
         if temp_value > max_values[ai]
             max_values[ai] = temp_value
@@ -76,45 +76,26 @@ function actionvalues(p::AlphaVectorPolicy, b::DiscreteBelief)
     return max_values
 end
 
-function value(p::AlphaVectorPolicy, b::SparseCat)
-    maximum(sparsecat_dot(p.pomdp, a, b) for a in p.alphas)
-end
+"""
+    POMDPPolicies.beliefvec(m::POMDP, b)
 
-function action(p::AlphaVectorPolicy, b::SparseCat)
-    num_vectors = length(p.alphas)
-    best_idx = 1
-    max_value = -Inf
-    for i = 1:num_vectors
-        temp_value = sparsecat_dot(p.pomdp, p.alphas[i], b)
-        if temp_value > max_value
-            max_value = temp_value
-            best_idx = i
-        end
-    end
-    return p.action_map[best_idx]
+Return a vector-like representation of the belief `b` suitable for calculating the dot product with the alpha vectors.
+"""
+function beliefvec end
+
+function beliefvec(m::POMDP, b::SparseCat)
+    return sparsevec(collect(stateindex(m, s) for s in b.vals), collect(b.probs), n_states(m))
 end
-    
-function actionvalues(p::AlphaVectorPolicy, b::SparseCat)
-    num_vectors = length(p.alphas)
-    max_values = -Inf*ones(n_actions(p.pomdp))
-    for i = 1:num_vectors
-        temp_value = sparsecat_dot(p.pomdp, p.alphas[i], b)
-        ai = actionindex(p.pomdp, p.action_map[i])
-        if ( temp_value > max_values[ai])
-            max_values[ai] = temp_value
-        end
+beliefvec(m::POMDP, b::DiscreteBelief) = b.b
+beliefvec(m::POMDP, b::AbstractArray) = b
+
+function beliefvec(m::POMDP, b)
+    sup = support(b)
+    bvec = zeros(length(sup)) # maybe this should be sparse?
+    for s in sup
+        bvec[stateindex(m, s)] = pdf(b, s)
     end
-    return max_values
- end
- 
-# perform dot product between an alpha vector and a sparse cat object
-function sparsecat_dot(problem::POMDP, alpha::Vector{Float64}, b::SparseCat)
-   val = 0.
-   for (s, p) in weighted_iterator(b)
-       si = stateindex(problem, s)
-       val += alpha[si]*p
-   end
-   return val
+    return bvec
 end
 
 function Base.push!(p::AlphaVectorPolicy, alpha::Vector{Float64}, a)
