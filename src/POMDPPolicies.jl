@@ -58,5 +58,10 @@ export
 
 include("utility_wrapper.jl")
 
+export
+    showpolicy
+
+include("pretty_printing.jl")
+
 
 end

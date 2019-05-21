@@ -25,3 +25,6 @@ end
 @testset "random" begin
     include("test_random_solver.jl")
 end
+@testset "pretty_printing" begin
+    include("test_pretty_printing.jl")
+end
