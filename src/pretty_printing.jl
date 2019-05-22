@@ -28,26 +28,38 @@ end
 function showpolicy(io::IO, mime::MIME"text/plain", slist::AbstractVector, p::Policy; pre::AbstractString=" ")
     S = eltype(slist)
     rows, cols = get(io, :displaysize, displaysize(io))
-    ioc = IOContext(io, :compact => true, :displaysize => (1, cols-length(pre)))
+    rows -= 3 # Yuck! This magic number is also in Base.print_matrix
+    sa_con = IOContext(io, :compact => true)
 
-    if get(io, :limit, false)
-        for s in slist[1:min(rows-1, end)]
-            print(ioc, pre)
-            print_sa(ioc, s, p, S)
-            println(ioc)
-        end
-        if length(slist) == rows
-            print(ioc, pre)
-            print_sa(ioc, last(slist), p, S)
-            println(ioc)
-        elseif length(slist) > rows
-            println(ioc, pre, "…")
-        end
-    else
-        for s in slist
-            print(ioc, pre)
-            print_sa(ioc, s, p, S)
-            println(ioc)
+    if !isempty(slist)
+        if get(io, :limit, false)
+            # print first element without a newline
+            print(io, pre)
+            print_sa(sa_con, first(slist), p, S)
+
+            # print middle elements
+            for s in slist[2:min(rows-1, end)]
+                print(io, '\n', pre)
+                print_sa(sa_con, s, p, S)
+            end
+
+            # print last element or ...
+            if length(slist) == rows
+                print(io, '\n', pre)
+                print_sa(sa_con, last(slist), p, S)
+            elseif length(slist) > rows
+                print(io, '\n', pre, "…")
+            end
+        else
+            # print first element without a newline
+            print(io, pre)
+            print_sa(sa_con, first(slist), p, S)
+
+            # print all other elements
+            for s in slist[2:end]
+                print(io, '\n', pre)
+                print_sa(sa_con, s, p, S)
+            end
         end
     end
 end
@@ -56,14 +68,11 @@ showpolicy(io::IO, m::Union{MDP,AbstractVector}, p::Policy; kwargs...) = showpol
 showpolicy(m::Union{MDP,AbstractVector}, p::Policy; kwargs...) = showpolicy(stdout, m, p; kwargs...)
 
 function print_sa(io::IO, s, p::Policy, S::Type)
-    ds = get(io, :displaysize, displaysize(io))
-    half_ds = (first(ds), div(last(ds)-4, 2))
-    show(IOContext(io, :typeinfo => S, :displaysize => half_ds), s)
+    show(IOContext(io, :typeinfo => S), s)
     print(io, " -> ")
-    action_io = IOContext(io, :displaysize => half_ds)
     try
-        show(action_io, action(p, s))
+        show(io, action(p, s))
     catch ex
-        showerror(action_io, ex)
+        showerror(IOContext(io, :limit=>true), ex)
     end
 end

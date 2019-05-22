@@ -9,6 +9,7 @@ It currently provides:
 - a vector policy type
 - a wrapper to collect statistics and errors about policies
 
+In addition, it provides the [`showpolicy`](@ref) function for printing policies similar to the way that matrices are printed in the repl.
 
 ```@contents
 ```
