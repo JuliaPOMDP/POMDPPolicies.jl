@@ -7,5 +7,10 @@ let
 
     p = solve(solver, gw)
 
-    display(gw=>p)
+    @test sprint(showpolicy, gw, p) == " [1, 1] -> :left\n [2, 1] -> :left\n [1, 2] -> :left\n [2, 2] -> :left\n [-1, -1] -> :left\n"
+
+    iob = IOBuffer()
+    io = IOContext(iob, :limit=>true, :displaysize=>(4, 7))
+    showpolicy(io, gw, p, pre="@ ")
+    @test String(take!(iob)) == "@ [1, 1] -> :left\n@ [2, 1] -> :left\n@ [1, 2] -> :left\n@ …\n"
 end

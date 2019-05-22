@@ -31,6 +31,11 @@ function solve(s::VectorSolver{A}, mdp::MDP{S,A}) where {S,A}
     return VectorPolicy{S,A}(mdp, s.act)
 end
 
+function Base.show(io::IO, p::VectorPolicy)
+    summary(io, p)    
+    println(io)
+    showpolicy(io, p.mdp, p)
+end
 
 """
      ValuePolicy{P<:Union{POMDP,MDP}, T<:AbstractMatrix{Float64}, A}
@@ -55,3 +60,9 @@ end
 action(p::ValuePolicy, s) = p.act[argmax(p.value_table[stateindex(p.mdp, s),:])]
 
 actionvalues(p::ValuePolicy, s) = p.value_table[stateindex(p.mdp, s), :]
+
+function Base.show(io::IO, p::ValuePolicy{M}) where M <: MDP
+    summary(io, p)
+    println(io)
+    showpolicy(io, p.mdp, p)
+end
