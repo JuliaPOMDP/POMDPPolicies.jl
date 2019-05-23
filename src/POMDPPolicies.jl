@@ -11,6 +11,8 @@ import POMDPs: action, value, solve, updater
 using BeliefUpdaters
 using POMDPModelTools
 
+using Base.Iterators # for take
+
 """
     actionvalues(p::Policy, s)
 
