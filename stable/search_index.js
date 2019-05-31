@@ -77,7 +77,7 @@ var documenterSearchIndex = {"docs": [
     "page": "About",
     "title": "About",
     "category": "section",
-    "text": "POMDPPolicies provides a collection of policy types for POMDPs.jl.It currently provides:an alpha vector policy type\na random policy\na stochastic policy type\na vector policy type\na wrapper to collect statistics and errors about policies"
+    "text": "POMDPPolicies provides a collection of policy types for POMDPs.jl.It currently provides:an alpha vector policy type\na random policy\na stochastic policy type\na vector policy type\na wrapper to collect statistics and errors about policiesIn addition, it provides the showpolicy function for printing policies similar to the way that matrices are printed in the repl."
 },
 
 {
@@ -110,6 +110,30 @@ var documenterSearchIndex = {"docs": [
     "title": "Random Policy",
     "category": "section",
     "text": "A policy that returns a randomly selected action using rand(rng, actions(pomdp)).RandomPolicyRandomSolver"
+},
+
+{
+    "location": "showpolicy.html#",
+    "page": "Pretty Printing Policies",
+    "title": "Pretty Printing Policies",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "showpolicy.html#POMDPPolicies.showpolicy",
+    "page": "Pretty Printing Policies",
+    "title": "POMDPPolicies.showpolicy",
+    "category": "function",
+    "text": "showpolicy([io], [mime], m::MDP, p::Policy)\nshowpolicy([io], [mime], statelist::AbstractVector, p::Policy)\nshowpolicy(...; pre=\" \")\n\nPrint the states in m or statelist and the actions from policy p corresponding to those states.\n\nFor the MDP version, if io[:limit] is true, will only print enough states to fill the display.\n\n\n\n\n\n"
+},
+
+{
+    "location": "showpolicy.html#Pretty-Printing-Policies-1",
+    "page": "Pretty Printing Policies",
+    "title": "Pretty Printing Policies",
+    "category": "section",
+    "text": "showpolicy"
 },
 
 {
