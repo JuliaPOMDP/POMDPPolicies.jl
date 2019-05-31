@@ -125,7 +125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Pretty Printing Policies",
     "title": "POMDPPolicies.showpolicy",
     "category": "function",
-    "text": "showpolicy([io], [mime], m::MDP, p::Policy)\nshowpolicy([io], [mime], statelist::AbstractVector, p::Policy)\nshowpolicy(...; pre=\" \")\n\nPrint the states in m or statelist and the actions from policy p corresponding to those states.\n\nIf io[:limit] is true, will only print enough states to fill the display.\n\n\n\n\n\n"
+    "text": "showpolicy([io], [mime], m::MDP, p::Policy)\nshowpolicy([io], [mime], statelist::AbstractVector, p::Policy)\nshowpolicy(...; pre=\" \")\n\nPrint the states in m or statelist and the actions from policy p corresponding to those states.\n\nFor the MDP version, if io[:limit] is true, will only print enough states to fill the display.\n\n\n\n\n\n"
 },
 
 {
