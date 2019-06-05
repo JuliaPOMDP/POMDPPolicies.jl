@@ -15,7 +15,7 @@ alphas can be a matrix or a vector of vectors
 - `action_map::Vector{A}` a list of action corresponding to the alpha vectors
 """
 struct AlphaVectorPolicy{P<:POMDP, A} <: Policy
-    pomdp::P
+    pomdp::P # needed for mapping states to locations in alpha vectors
     alphas::Vector{Vector{Float64}}
     action_map::Vector{A}
 end
