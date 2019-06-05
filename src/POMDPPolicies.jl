@@ -25,7 +25,8 @@ export
 
 export
     AlphaVectorPolicy,
-    alpha_actions
+    alphavectors,
+    alphapairs
 
 include("alpha_vector.jl")
 

@@ -11,7 +11,7 @@ Construct a policy from alpha vectors.
 
 Represents a policy with a set of alpha vectors.
 
-Use `action` to get the best action for a belief, an `alpha_actions` to iterate through alpha-vector => action pairs.
+Use `action` to get the best action for a belief, and `alphavectors` and `alphapairs` to 
 
 # Fields
 - `pomdp::P` the POMDP problem 
@@ -43,9 +43,14 @@ end
 updater(p::AlphaVectorPolicy) = DiscreteUpdater(p.pomdp)
 
 """
-Return an iterator of alpha-vector => action pairs in the policy.
+Return an iterator of alpha vector-action pairs in the policy.
 """
-alpha_actions(p::AlphaVectorPolicy) = (p.alphas[i]=>p.action_map[i] for i in 1:length(p.alphas))
+alphapairs(p::AlphaVectorPolicy) = (p.alphas[i]=>p.action_map[i] for i in 1:length(p.alphas))
+
+"""
+Return the alpha vectors.
+"""
+alphavectors(p::AlphaVectorPolicy) = p.alphas
 
 # The three functions below rely on beliefvec being implemented for the belief type 
 # Implementations of beliefvec are below
