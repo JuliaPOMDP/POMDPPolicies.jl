@@ -1,4 +1,12 @@
 """
+    AlphaVectorPolicy(pomdp::POMDP, alphas, action_map)
+
+Construct a policy from alpha vectors.
+
+# Arguments
+- `alphas`: an |S| x (number of alpha vecs) matrix or a vector of alpha vectors.
+- `action_map`: a vector of the actions correponding to each alpha vector
+
     AlphaVectorPolicy{P<:POMDP, A}
 
 Represents a policy with a set of alpha vectors.
@@ -20,15 +28,6 @@ function AlphaVectorPolicy(pomdp::POMDP, alphas)
     AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
 end
 
-"""
-    AlphaVectorPolicy(pomdp::POMDP, alphas, action_map)
-
-Construct a policy from alpha vectors.
-
-# Arguments
-- `alphas`: an |S| x (number of alpha vecs) matrix or a vector of alpha vectors.
-- `action_map`: a vector of the actions correponding to each alpha vector
-"""
 # assumes alphas is |S| x (number of alpha vecs)
 function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
     # turn alphas into vector of vectors
