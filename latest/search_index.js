@@ -13,7 +13,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Alpha Vector Policy",
     "title": "POMDPPolicies.AlphaVectorPolicy",
     "category": "type",
-    "text": "AlphaVectorPolicy{P<:POMDP, A}\n\nRepresents a policy with a set of alpha vectors \n\nConstructor: \n\n`AlphaVectorPolicy(pomdp::POMDP, alphas)`\n\nalphas can be a matrix or a vector of vectors\n\nFields\n\npomdp::P the POMDP problem \nalphas::Vector{Vector{Float64}} the list of alpha vectors\naction_map::Vector{A} a list of action corresponding to the alpha vectors\n\n\n\n\n\n"
+    "text": "AlphaVectorPolicy(pomdp::POMDP, alphas, action_map)\n\nConstruct a policy from alpha vectors.\n\nArguments\n\nalphas: an |S| x (number of alpha vecs) matrix or a vector of alpha vectors.\naction_map: a vector of the actions correponding to each alpha vector\nAlphaVectorPolicy{P<:POMDP, A}\n\nRepresents a policy with a set of alpha vectors.\n\nUse action to get the best action for a belief, and alphavectors and alphapairs to \n\nFields\n\npomdp::P the POMDP problem \nalphas::Vector{Vector{Float64}} the list of alpha vectors\naction_map::Vector{A} a list of action corresponding to the alpha vectors\n\n\n\n\n\n"
+},
+
+{
+    "location": "alpha_vector.html#POMDPPolicies.alphavectors",
+    "page": "Alpha Vector Policy",
+    "title": "POMDPPolicies.alphavectors",
+    "category": "function",
+    "text": "Return the alpha vectors.\n\n\n\n\n\n"
+},
+
+{
+    "location": "alpha_vector.html#POMDPPolicies.alphapairs",
+    "page": "Alpha Vector Policy",
+    "title": "POMDPPolicies.alphapairs",
+    "category": "function",
+    "text": "Return an iterator of alpha vector-action pairs in the policy.\n\n\n\n\n\n"
 },
 
 {
@@ -29,7 +45,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Alpha Vector Policy",
     "title": "Alpha Vector Policy",
     "category": "section",
-    "text": "Represents a policy with a set of alpha vectors. Can be constructed with AlphaVectorPolicy(pomdp, alphas, action_map), where alphas is either a vector of vectors or an |S| x (number of alpha vectors) matrix. The action_map argument is a vector of actions with length equal to the number of alpha vectors. If this argument is not provided, ordered_actions is used to generate a default action map.Determining the estimated value and optimal action depends on calculating the dot product between alpha vectors and a belief vector. POMDPPolicies.beliefvec(pomdp, b) is used to create this vector and can be overridden for new belief types for efficiency.AlphaVectorPolicy\nPOMDPPolicies.beliefvec"
+    "text": "Represents a policy with a set of alpha vectors (See AlphaVectorPolicy constructor docstring). In addition to finding the optimal action with action, the alpha vectors can be accessed with alphavectors or alphapairs.Determining the estimated value and optimal action depends on calculating the dot product between alpha vectors and a belief vector. POMDPPolicies.beliefvec(pomdp, b) is used to create this vector and can be overridden for new belief types for efficiency.AlphaVectorPolicy\nalphavectors\nalphapairs\nPOMDPPolicies.beliefvec"
 },
 
 {
