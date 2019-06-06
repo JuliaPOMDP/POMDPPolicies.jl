@@ -7,7 +7,7 @@ let
     # these values were gotten from FIB.jl
     # alphas = [-29.4557 -36.5093; -19.4557 -16.0629]
     alphas = [ -16.0629 -19.4557; -36.5093 -29.4557]
-    policy = AlphaVectorPolicy(pomdp, alphas)
+    policy = AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
 
     @test Set(alphapairs(policy)) == Set([[-16.0629, -36.5093]=>false, [-19.4557, -29.4557]=>true])
     @test Set(alphavectors(policy)) == Set([[-16.0629, -36.5093], [-19.4557, -29.4557]])
