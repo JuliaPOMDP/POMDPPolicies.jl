@@ -9,6 +9,9 @@ let
     alphas = [ -16.0629 -19.4557; -36.5093 -29.4557]
     policy = AlphaVectorPolicy(pomdp, alphas)
 
+    @test Set(alphapairs(policy)) == Set([[-16.0629, -36.5093]=>false, [-19.4557, -29.4557]=>true])
+    @test Set(alphavectors(policy)) == Set([[-16.0629, -36.5093], [-19.4557, -29.4557]])
+
     # initial belief is 100% confidence in baby not being hungry
     @test isapprox(value(policy, b0), -16.0629)
     @test isapprox(value(policy, [1.0,0.0]), -16.0629)

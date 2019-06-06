@@ -1,13 +1,17 @@
 """
+    AlphaVectorPolicy(pomdp::POMDP, alphas, action_map)
+
+Construct a policy from alpha vectors.
+
+# Arguments
+- `alphas`: an |S| x (number of alpha vecs) matrix or a vector of alpha vectors.
+- `action_map`: a vector of the actions correponding to each alpha vector
+
     AlphaVectorPolicy{P<:POMDP, A}
 
-Represents a policy with a set of alpha vectors 
+Represents a policy with a set of alpha vectors.
 
-Constructor: 
-
-    `AlphaVectorPolicy(pomdp::POMDP, alphas)`
-
-alphas can be a matrix or a vector of vectors
+Use `action` to get the best action for a belief, and `alphavectors` and `alphapairs` to 
 
 # Fields
 - `pomdp::P` the POMDP problem 
@@ -19,6 +23,7 @@ struct AlphaVectorPolicy{P<:POMDP, A} <: Policy
     alphas::Vector{Vector{Float64}}
     action_map::Vector{A}
 end
+
 function AlphaVectorPolicy(pomdp::POMDP, alphas)
     AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
 end
@@ -35,10 +40,17 @@ function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
     AlphaVectorPolicy(p, alpha_vecs, action_map)
 end
 
-
-
 updater(p::AlphaVectorPolicy) = DiscreteUpdater(p.pomdp)
 
+"""
+Return an iterator of alpha vector-action pairs in the policy.
+"""
+alphapairs(p::AlphaVectorPolicy) = (p.alphas[i]=>p.action_map[i] for i in 1:length(p.alphas))
+
+"""
+Return the alpha vectors.
+"""
+alphavectors(p::AlphaVectorPolicy) = p.alphas
 
 # The three functions below rely on beliefvec being implemented for the belief type 
 # Implementations of beliefvec are below

@@ -24,7 +24,9 @@ export
     actionvalues
 
 export
-    AlphaVectorPolicy
+    AlphaVectorPolicy,
+    alphavectors,
+    alphapairs
 
 include("alpha_vector.jl")
 
