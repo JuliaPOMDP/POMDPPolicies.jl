@@ -24,9 +24,7 @@ struct AlphaVectorPolicy{P<:POMDP, A} <: Policy
     action_map::Vector{A}
 end
 
-function AlphaVectorPolicy(pomdp::POMDP, alphas)
-    AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
-end
+@deprecate AlphaVectorPolicy(pomdp::POMDP, alphas) AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
 
 # assumes alphas is |S| x (number of alpha vecs)
 function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
