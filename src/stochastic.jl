@@ -49,7 +49,9 @@ mutable struct CategoricalTabularPolicy <: Policy
     stochastic::StochasticPolicy
     value::ValuePolicy
 end
-CategoricalTabularPolicy(mdp::Union{POMDP,MDP}; rng=Random.GLOBAL_RNG) = CategoricalTabularPolicy(StochasticPolicy(Weights(zeros(n_actions(mdp)))), ValuePolicy(mdp))
+function CategoricalTabularPolicy(mdp::Union{POMDP,MDP}; rng=Random.GLOBAL_RNG)
+    CategoricalTabularPolicy(StochasticPolicy(Weights(zeros(length(actions((mdp))))), rng), ValuePolicy(mdp))
+end
 
 function action(policy::CategoricalTabularPolicy, s)
     policy.stochastic.distribution = Weights(policy.value.value_table[stateindex(policy.value.mdp, s),:])

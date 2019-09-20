@@ -14,7 +14,7 @@ function showpolicy(io::IO, mime::MIME"text/plain", m::MDP, p::Policy; pre=" ", 
     rows = first(get(io, :displaysize, displaysize(io)))
     rows -= 3 # Yuck! This magic number is also in Base.print_matrix
     try
-        if limited && n_states(m) > rows
+        if limited && length(states(m)) > rows
             slist = collect(take(states(m), rows-1))
             truncated = true
         else

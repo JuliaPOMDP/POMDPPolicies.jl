@@ -15,16 +15,20 @@ Use `action` to get the best action for a belief, and `alphavectors` and `alphap
 
 # Fields
 - `pomdp::P` the POMDP problem 
+- `n_states::Int` the number of states in the POMDP
 - `alphas::Vector{Vector{Float64}}` the list of alpha vectors
 - `action_map::Vector{A}` a list of action corresponding to the alpha vectors
 """
 struct AlphaVectorPolicy{P<:POMDP, A} <: Policy
     pomdp::P # needed for mapping states to locations in alpha vectors
+    n_states::Int
     alphas::Vector{Vector{Float64}}
     action_map::Vector{A}
 end
 
 @deprecate AlphaVectorPolicy(pomdp::POMDP, alphas) AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
+
+AlphaVectorPolicy(m::POMDP, alphas::AbstractVector, amap) = AlphaVectorPolicy(m, length(states(m)), alphas, amap)
 
 # assumes alphas is |S| x (number of alpha vecs)
 function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
@@ -35,7 +39,7 @@ function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
         push!(alpha_vecs, vec(alphas[:,i]))
     end
 
-    AlphaVectorPolicy(p, alpha_vecs, action_map)
+    AlphaVectorPolicy(p, length(states(p)), alpha_vecs, action_map)
 end
 
 updater(p::AlphaVectorPolicy) = DiscreteUpdater(p.pomdp)
@@ -53,12 +57,12 @@ alphavectors(p::AlphaVectorPolicy) = p.alphas
 # The three functions below rely on beliefvec being implemented for the belief type 
 # Implementations of beliefvec are below
 function value(p::AlphaVectorPolicy, b)
-    bvec = beliefvec(p.pomdp, b)
+    bvec = beliefvec(p.pomdp, p.n_states, b)
     maximum(dot(bvec,a) for a in p.alphas)
 end
 
 function action(p::AlphaVectorPolicy, b)
-    bvec = beliefvec(p.pomdp, b)
+    bvec = beliefvec(p.pomdp, p.n_states, b)
     num_vectors = length(p.alphas)
     best_idx = 1
     max_value = -Inf
@@ -73,9 +77,9 @@ function action(p::AlphaVectorPolicy, b)
 end
 
 function actionvalues(p::AlphaVectorPolicy, b)
-    bvec = beliefvec(p.pomdp, b)
+    bvec = beliefvec(p.pomdp, p.n_states, b)
     num_vectors = length(p.alphas)
-    max_values = -Inf*ones(n_actions(p.pomdp))
+    max_values = -Inf*ones(length(p.action_map))
     for i = 1:num_vectors
         temp_value = dot(bvec, p.alphas[i])
         ai = actionindex(p.pomdp, p.action_map[i]) 
@@ -87,21 +91,21 @@ function actionvalues(p::AlphaVectorPolicy, b)
 end
 
 """
-    POMDPPolicies.beliefvec(m::POMDP, b)
+    POMDPPolicies.beliefvec(m::POMDP, n_states::Int, b)
 
 Return a vector-like representation of the belief `b` suitable for calculating the dot product with the alpha vectors.
 """
 function beliefvec end
 
-function beliefvec(m::POMDP, b::SparseCat)
-    return sparsevec(collect(stateindex(m, s) for s in b.vals), collect(b.probs), n_states(m))
+function beliefvec(m::POMDP, n, b::SparseCat)
+    return sparsevec(collect(stateindex(m, s) for s in b.vals), collect(b.probs), n)
 end
-beliefvec(m::POMDP, b::DiscreteBelief) = b.b
-beliefvec(m::POMDP, b::AbstractArray) = b
+beliefvec(m::POMDP, n, b::DiscreteBelief) = b.b
+beliefvec(m::POMDP, n, b::AbstractArray) = b
 
-function beliefvec(m::POMDP, b)
+function beliefvec(m::POMDP, n_states, b)
     sup = support(b)
-    bvec = zeros(length(sup)) # maybe this should be sparse?
+    bvec = zeros(n_states)
     for s in sup
         bvec[stateindex(m, s)] = pdf(b, s)
     end
@@ -112,3 +116,5 @@ function Base.push!(p::AlphaVectorPolicy, alpha::Vector{Float64}, a)
     push!(p.alphas, alpha)
     push!(p.action_map, a)
 end
+
+@deprecate beliefvec(m::POMDP, b) beliefvec(m, length(states(m)), b)

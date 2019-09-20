@@ -1,6 +1,6 @@
 name = "POMDPPolicies"
 uuid = "182e52fb-cfd0-5e46-8c26-fd0667c990f4"
-version = "0.1.5"
+version = "0.2.0"
 
 [deps]
 BeliefUpdaters = "8bb6e9a1-7d73-552c-a44a-e5dc5634aac4"
@@ -12,7 +12,8 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
-julia = "≥ 0.7.0"
+POMDPs = "0.7.3, 0.8"
+julia = "1"
 
 [extras]
 POMDPModels = "355abbd5-f08e-5560-ac9e-8b5f2592a0ca"

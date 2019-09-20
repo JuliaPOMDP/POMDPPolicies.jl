@@ -55,7 +55,7 @@ struct ValuePolicy{P<:Union{POMDP,MDP}, T<:AbstractMatrix{Float64}, A} <: Policy
     value_table::T
     act::Vector{A}
 end
-function ValuePolicy(mdp::Union{MDP,POMDP}, value_table = zeros(n_states(mdp), n_actions(mdp)))
+function ValuePolicy(mdp::Union{MDP,POMDP}, value_table=zeros(length(states(mdp)), length(actions(mdp))))
     return ValuePolicy(mdp, value_table, ordered_actions(mdp))
 end
 
