@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Alpha Vector Policy",
     "title": "POMDPPolicies.AlphaVectorPolicy",
     "category": "type",
-    "text": "AlphaVectorPolicy(pomdp::POMDP, alphas, action_map)\n\nConstruct a policy from alpha vectors.\n\nArguments\n\nalphas: an |S| x (number of alpha vecs) matrix or a vector of alpha vectors.\naction_map: a vector of the actions correponding to each alpha vector\nAlphaVectorPolicy{P<:POMDP, A}\n\nRepresents a policy with a set of alpha vectors.\n\nUse action to get the best action for a belief, and alphavectors and alphapairs to \n\nFields\n\npomdp::P the POMDP problem \nalphas::Vector{Vector{Float64}} the list of alpha vectors\naction_map::Vector{A} a list of action corresponding to the alpha vectors\n\n\n\n\n\n"
+    "text": "AlphaVectorPolicy(pomdp::POMDP, alphas, action_map)\n\nConstruct a policy from alpha vectors.\n\nArguments\n\nalphas: an |S| x (number of alpha vecs) matrix or a vector of alpha vectors.\naction_map: a vector of the actions correponding to each alpha vector\nAlphaVectorPolicy{P<:POMDP, A}\n\nRepresents a policy with a set of alpha vectors.\n\nUse action to get the best action for a belief, and alphavectors and alphapairs to \n\nFields\n\npomdp::P the POMDP problem \nn_states::Int the number of states in the POMDP\nalphas::Vector{Vector{Float64}} the list of alpha vectors\naction_map::Vector{A} a list of action corresponding to the alpha vectors\n\n\n\n\n\n"
 },
 
 {
@@ -37,7 +37,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Alpha Vector Policy",
     "title": "POMDPPolicies.beliefvec",
     "category": "function",
-    "text": "POMDPPolicies.beliefvec(m::POMDP, b)\n\nReturn a vector-like representation of the belief b suitable for calculating the dot product with the alpha vectors.\n\n\n\n\n\n"
+    "text": "POMDPPolicies.beliefvec(m::POMDP, n_states::Int, b)\n\nReturn a vector-like representation of the belief b suitable for calculating the dot product with the alpha vectors.\n\n\n\n\n\n"
 },
 
 {
