@@ -79,7 +79,7 @@ end
 function actionvalues(p::AlphaVectorPolicy, b)
     bvec = beliefvec(p.pomdp, p.n_states, b)
     num_vectors = length(p.alphas)
-    max_values = -Inf*ones(length(p.action_map))
+    max_values = -Inf*ones(length(actions(p.pomdp)))
     for i = 1:num_vectors
         temp_value = dot(bvec, p.alphas[i])
         ai = actionindex(p.pomdp, p.action_map[i]) 
