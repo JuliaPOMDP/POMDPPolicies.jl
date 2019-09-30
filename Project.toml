@@ -1,6 +1,6 @@
 name = "POMDPPolicies"
 uuid = "182e52fb-cfd0-5e46-8c26-fd0667c990f4"
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 BeliefUpdaters = "8bb6e9a1-7d73-552c-a44a-e5dc5634aac4"
