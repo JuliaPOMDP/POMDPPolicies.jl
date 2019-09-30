@@ -16,6 +16,7 @@ let
     @test isapprox(value(policy, b0), -16.0629)
     @test isapprox(value(policy, [1.0,0.0]), -16.0629)
     @test isapprox(actionvalues(policy, b0), [-16.0629, -19.4557])
+    @test length(actionvalues(policy, b0)) == length(actions(pomdp))
    
     # because baby isn't hungry, policy should not feed (return false)
     @test action(policy, b0) == false
