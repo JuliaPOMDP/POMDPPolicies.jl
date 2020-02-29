@@ -57,29 +57,3 @@ function action(policy::CategoricalTabularPolicy, s)
     policy.stochastic.distribution = Weights(policy.value.value_table[stateindex(policy.value.mdp, s),:])
     return policy.value.act[sample(policy.stochastic.rng, policy.stochastic.distribution)]
 end
-
-"""
-    EpsGreedyPolicy
-
-represents an epsilon greedy policy, sampling a random action with a probability `eps` or sampling from a given stochastic policy otherwise.
-
-constructor:
-
-`EpsGreedyPolicy(mdp::Union{MDP,POMDP}, eps::Float64; rng=Random.GLOBAL_RNG)`
-"""
-mutable struct EpsGreedyPolicy <: Policy
-    eps::Float64
-    val::ValuePolicy
-    uni::StochasticPolicy
-end
-
-EpsGreedyPolicy(mdp::Union{MDP,POMDP}, eps::Float64;
-                rng=Random.GLOBAL_RNG) = EpsGreedyPolicy(eps, ValuePolicy(mdp), UniformRandomPolicy(mdp, rng))
-
-function action(policy::EpsGreedyPolicy, s)
-    if rand(policy.uni.rng) > policy.eps
-        return action(policy.val, s)
-    else
-        return action(policy.uni, s)
-    end
-end
