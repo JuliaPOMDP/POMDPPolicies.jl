@@ -25,7 +25,7 @@ if the value is greater or equal to `end_val`, it stays constant.
 
 `LinearDecaySchedule(;start_val, end_val, steps)`
 """
-@with_kw mutable struct LinearDecaySchedule{R<:Real} <: ExplorationSchedule
+@with_kw struct LinearDecaySchedule{R<:Real} <: ExplorationSchedule
     start_val::R
     end_val::R
     steps::Int
