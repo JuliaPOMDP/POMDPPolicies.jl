@@ -112,7 +112,9 @@ end
 function POMDPs.action(p::SoftmaxPolicy, on_policy::Policy, s)
     p.temperature = update_value(p.schedule, p.temperature)
     vals = actionvalues(on_policy, s)
-    exp_vals = exp.(vals ./ p.temperature)
+    vals ./= p.temperature
+    maxval = maximum(vals)
+    exp_vals = exp.(vals .- maxval)
     exp_vals /= sum(exp_vals)
     return p.actions[sample(p.rng, Weights(exp_vals))]
 end
