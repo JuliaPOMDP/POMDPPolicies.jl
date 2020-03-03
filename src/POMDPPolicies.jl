@@ -60,7 +60,7 @@ include("stochastic.jl")
 export ExplorationSchedule,
        EpsGreedyPolicy,
        SoftmaxPolicy,
-       ExplorationSchedule,
+       ExplorationPolicy,
        LinearDecaySchedule,
        ConstantSchedule
 
