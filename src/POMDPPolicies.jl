@@ -61,6 +61,7 @@ export ExplorationSchedule,
        EpsGreedyPolicy,
        SoftmaxPolicy,
        ExplorationPolicy,
+       exploration_parameter,
        LinearDecaySchedule,
        ConstantSchedule
 
