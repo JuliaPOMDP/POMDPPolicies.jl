@@ -57,13 +57,11 @@ export
 
 include("stochastic.jl")
 
-export ExplorationSchedule,
+export LinearDecaySchedule, 
        EpsGreedyPolicy,
        SoftmaxPolicy,
        ExplorationPolicy,
-       exploration_parameter,
-       LinearDecaySchedule,
-       ConstantSchedule
+       loginfo
 
 include("exploration_policies.jl")
 
