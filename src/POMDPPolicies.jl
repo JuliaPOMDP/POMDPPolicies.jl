@@ -4,6 +4,7 @@ using LinearAlgebra
 using Random
 using StatsBase # for Weights
 using SparseArrays # for sparse vectors in alpha_vector.jl
+using Parameters
 
 using POMDPs
 import POMDPs: action, value, solve, updater
@@ -52,10 +53,17 @@ include("vector.jl")
 export
     StochasticPolicy,
     UniformRandomPolicy,
-    CategoricalTabularPolicy,
-    EpsGreedyPolicy
+    CategoricalTabularPolicy
 
 include("stochastic.jl")
+
+export LinearDecaySchedule, 
+       EpsGreedyPolicy,
+       SoftmaxPolicy,
+       ExplorationPolicy,
+       loginfo
+
+include("exploration_policies.jl")
 
 export
     PolicyWrapper,

@@ -6,6 +6,7 @@ It currently provides:
 - an alpha vector policy type
 - a random policy
 - a stochastic policy type
+- exploration policies
 - a vector policy type
 - a wrapper to collect statistics and errors about policies
 
