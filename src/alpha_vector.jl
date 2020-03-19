@@ -28,7 +28,10 @@ end
 
 @deprecate AlphaVectorPolicy(pomdp::POMDP, alphas) AlphaVectorPolicy(pomdp, alphas, ordered_actions(pomdp))
 
-AlphaVectorPolicy(m::POMDP, alphas::AbstractVector, amap) = AlphaVectorPolicy(m, length(states(m)), alphas, amap)
+function AlphaVectorPolicy(m::POMDP, alphas::AbstractVector, amap)
+    AlphaVectorPolicy(m, length(states(m)), alphas,
+                      convert(Vector{actiontype(m)}, amap))
+end
 
 # assumes alphas is |S| x (number of alpha vecs)
 function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
@@ -39,7 +42,8 @@ function AlphaVectorPolicy(p::POMDP, alphas::Matrix{Float64}, action_map)
         push!(alpha_vecs, vec(alphas[:,i]))
     end
 
-    AlphaVectorPolicy(p, length(states(p)), alpha_vecs, action_map)
+    AlphaVectorPolicy(p, length(states(p)), alpha_vecs,
+                      convert(Vector{actiontype(p)}, action_map))
 end
 
 updater(p::AlphaVectorPolicy) = DiscreteUpdater(p.pomdp)

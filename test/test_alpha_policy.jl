@@ -37,4 +37,8 @@ let
 
     @test value(policy, b0) == 0.0
     @test action(policy, b0) == true
+
+    # JuliaPOMDP/SARSOP.jl#39
+    policy = AlphaVectorPolicy(pomdp, alphas, convert(BitArray, ordered_actions(pomdp)))
+    policy = AlphaVectorPolicy(pomdp, collect(alphas[:, i] for i in 1:size(alphas, 2)), convert(BitArray, ordered_actions(pomdp)))
 end
