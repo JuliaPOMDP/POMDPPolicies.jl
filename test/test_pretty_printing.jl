@@ -1,7 +1,7 @@
 let
     gw = SimpleGridWorld(size=(2,2))
 
-    pvec = fill(:left, n_states(gw))
+    pvec = fill(:left, length(states(gw)))
 
     solver = VectorSolver(pvec)
 
@@ -23,7 +23,6 @@ let
     iob = IOBuffer()
     io = IOContext(iob, :limit=>true, :displaysize=>(7, 7))
     POMDPs.states(m::MDP) = 1:m.n
-    POMDPs.n_states(m::MDP) = m.n
     POMDPs.actions(m::MDP) = 1:3
     m = M(1_000_000_000)
     showpolicy(io, m, RandomPolicy(m))
