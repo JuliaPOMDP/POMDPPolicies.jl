@@ -1,7 +1,7 @@
 
 """
-    PlaybackPolicy{A, P<:Policy}
-a generic policy that uses a fixed sequence of actions until they are all used and then falls back onto a backup policy until the end of the episode
+    PlaybackPolicy{A<:AbstractArray, P<:Policy, V<:AbstractArray{<:Real}}
+a policy that applies a fixed sequence of actions until they are all used and then falls back onto a backup policy until the end of the episode.
 
 Constructor:
 
@@ -13,10 +13,10 @@ Constructor:
 - `logpdfs::Vector{Float64}` the log probability (density) of actions
 - `i::Int64` the current action index
 """
-mutable struct PlaybackPolicy{A, P<:Policy, V<:Real} <: Policy
-    actions::AbstractArray{A}
+mutable struct PlaybackPolicy{A<:AbstractArray, P<:Policy, V<:AbstractArray{<:Real}} <: Policy
+    actions::A
     backup_policy::P
-    logpdfs::AbstractArray{V}
+    logpdfs::V
     i::Int64
 end
 
