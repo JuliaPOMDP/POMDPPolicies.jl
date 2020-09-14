@@ -1,11 +1,11 @@
 
 """
-    RandomPolicy{RNG<:AbstractRNG, P<:Union{POMDP,MDP}, U<:Updater}
-a generic policy that uses the actions function to create a list of actions and then randomly samples an action from it.
+    PlaybackPolicy{A, P<:Policy}
+a generic policy that uses a fixed sequence of actions until they are all used and then falls back onto a backup policy until the end of the episode
 
 Constructor:
 
-    `PlaybackPolicy(actions::Vector{A}, backup_policy::Policy; logpdfs::Vector{Float64} = [])`
+    `PlaybackPolicy(actions::AbstractArray, backup_policy::Policy; logpdfs::AbstractArray{Float64, 1} = Float64[])`
 
 # Fields
 - `actions::Vector{A}` a vector of actions to play back
@@ -13,15 +13,15 @@ Constructor:
 - `logpdfs::Vector{Float64}` the log probability (density) of actions
 - `i::Int64` the current action index
 """
-mutable struct PlaybackPolicy{A} <: Policy
-    actions::Vector{A}
-    backup_policy::Policy
-    logpdfs::Vector{Float64}
+mutable struct PlaybackPolicy{A, P<:Policy, V<:Real} <: Policy
+    actions::AbstractArray{A}
+    backup_policy::P
+    logpdfs::AbstractArray{V}
     i::Int64
 end
 
 # Constructor for the PlaybackPolicy
-PlaybackPolicy(actions::Vector{A}, backup_policy::Policy; logpdfs::Vector{Float64} = Float64[]) where {A} = PlaybackPolicy(actions, backup_policy, logpdfs, 1)
+PlaybackPolicy(actions::AbstractArray, backup_policy::Policy; logpdfs::AbstractArray{<:Real} = Float64[]) = PlaybackPolicy(actions, backup_policy, logpdfs, 1)
 
 # Action selection for the PlaybackPolicy
 function POMDPs.action(p::PlaybackPolicy, s)
