@@ -5,6 +5,7 @@ using Random
 using StatsBase # for Weights
 using SparseArrays # for sparse vectors in alpha_vector.jl
 using Parameters
+using Distributions # For logpdf extenstion in playback policy
 
 using POMDPs
 import POMDPs: action, value, solve, updater
@@ -21,7 +22,7 @@ returns the values of each action at state s in a vector
 """
 function actionvalues end
 
-export 
+export
     actionvalues
 
 export
@@ -57,7 +58,7 @@ export
 
 include("stochastic.jl")
 
-export LinearDecaySchedule, 
+export LinearDecaySchedule,
        EpsGreedyPolicy,
        SoftmaxPolicy,
        ExplorationPolicy,
@@ -76,5 +77,9 @@ export
 
 include("pretty_printing.jl")
 
+export
+    PlaybackPolicy
+
+include("playback.jl")
 
 end

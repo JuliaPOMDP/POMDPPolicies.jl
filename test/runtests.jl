@@ -28,6 +28,9 @@ end
 @testset "pretty_printing" begin
     include("test_pretty_printing.jl")
 end
-@testset "exploration policies" begin 
+@testset "exploration policies" begin
     include("test_exploration_policies.jl")
+end
+@testset "playback policies" begin
+    include("test_playback_policy.jl")
 end
