@@ -34,9 +34,9 @@ export
 include("alpha_vector.jl")
 
 export
-    StagedAlphaVectorPolicy
+    StagedPolicy
 
-include("staged_alpha_vector.jl")
+include("staged_policy.jl")
 
 export
     FunctionPolicy,
