@@ -14,7 +14,7 @@ end
 ### functional methods ###
 value(p::StagedPolicy, b, t) = t <= horizon(p.pomdp) ? value(p.staged_policies[t], b) : 0.
 
-action(p::StagedPolicy, b, t) = t <= horizon(p.pomdp) ? action(p.staged_policies[t], b) : -1
+action(p::StagedPolicy, b, t) = t <= horizon(p.pomdp) ? action(p.staged_policies[t], b) : ordered_actions(p.pomdp)[1]
 
 
 
