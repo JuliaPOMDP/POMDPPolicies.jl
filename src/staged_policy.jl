@@ -35,7 +35,7 @@ Return the alpha vectors of given stage
 """
 alphavectors(p::StagedPolicy, t::Int64) = alphavectors(p.staged_policies[t])
 
-actionvalues(p::StagedPolicy, b) = actionvalues(p.staged_policies[t], b)
+actionvalues(p::StagedPolicy, b, t::Int64) = actionvalues(p.staged_policies[t], b)
 
 function Base.push!(p::StagedPolicy, alpha::Vector{Float64}, a, t)
     push!(p.staged_policies[t].alphas, alpha)
