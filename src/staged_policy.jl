@@ -16,14 +16,15 @@ value(p::StagedPolicy, b, t) = t <= horizon(p.pomdp) ? value(p.staged_policies[t
 
 action(p::StagedPolicy, b, t) = t <= horizon(p.pomdp) ? action(p.staged_policies[t], b) : ordered_actions(p.pomdp)[1]
 
+# Given that, for example, POMDPSimulators.jl does not work with action(p, b, t),
+# we need to somehow introduce the stage variable
+action(p::StagedPolicy, b::DiscreteBelief) = action(p, b, stage(p.pomdp, b.state_list[1]))
 
 
 # I am not sure whether this should be
 updater(p::StagedPolicy) = DiscreteUpdater(p.pomdp)
 # or
 updater(p::StagedPolicy, t) = DiscreteUpdater(p.staged_policies[t].pomdp)
-
-### methods not tested yet ###
 
 """
 Return an iterator of alpha vector-action pairs of given stage in the policy.
