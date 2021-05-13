@@ -34,3 +34,7 @@ end
 @testset "playback policies" begin
     include("test_playback_policy.jl")
 end
+
+@testset "test_staged_policy" begin
+    include("test_staged_policy.jl")
+end
