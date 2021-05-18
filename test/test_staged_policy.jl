@@ -12,6 +12,67 @@ AlphaVec() = AlphaVec([0.0], 0)
 Base.hash(a::AlphaVec, h::UInt) = hash(a.alpha, hash(a.action, h))
 ==(a::AlphaVec, b::AlphaVec) = (a.alpha,a.action) == (b.alpha, b.action)
 
+
+import BeliefUpdaters: pdf
+pdf(b::DiscreteBelief, s) = b.b[typeof(HorizonLength(b.pomdp)) == InfiniteHorizon ?
+                                stateindex(b.pomdp, s) : stage_stateindex(b.pomdp, s)]
+
+import BeliefUpdaters: initialize_belief
+function initialize_belief(bu::DiscreteUpdater, dist::FiniteHorizonPOMDPs.InStageDistribution)
+    state_list = ordered_stage_states(bu.pomdp, stage(dist))
+    ns = length(state_list)
+    b = zeros(ns)
+    belief = DiscreteBelief(bu.pomdp, state_list, b)
+    for s in support(dist)
+        sidx = stage_stateindex(bu.pomdp, s)
+        belief.b[sidx] = pdf(dist, s)
+    end
+    return belief
+end
+
+import BeliefUpdaters: update
+function update(bu::DiscreteUpdater, b::DiscreteBelief, a, o)
+    pomdp = bu.pomdp
+    state_space = b.state_list
+    bp = zeros(length(state_space))
+
+    for (si, s) in enumerate(state_space)
+        si = stage_stateindex(pomdp, s)
+
+        if pdf(b, s) > 0.0
+            td = transition(pomdp, s, a)
+            for (sp, tp) in weighted_iterator(td)
+                spi = stage_stateindex(pomdp, sp)
+                op = obs_weight(pomdp, s, a, sp, o) # shortcut for observation probability from POMDPModelTools
+                op2 = pdf(observation(pomdp, a, sp), o)
+
+                bp[spi] += op * tp * b.b[si]
+            end
+        end
+    end
+
+    bp_sum = sum(bp)
+
+    if bp_sum == 0.0
+        error("""
+              Failed discrete belief update: new probabilities sum to zero.
+
+              b = $b
+              a = $a
+              o = $o
+
+              Failed discrete belief update: new probabilities sum to zero.
+              """)
+    end
+
+    # Normalize
+    bp ./= bp_sum
+
+    return DiscreteBelief(pomdp, ordered_stage_states(pomdp, stage(pomdp, o)+1), bp)
+end
+
+methods(update)
+
 #test
 let
     hor = 5
@@ -51,6 +112,10 @@ let
     # try pushing new vector
     push!(policy, [0.0,0.0], 0, hor)
     @test isapprox(length(policy.staged_policies[hor].alphas), 4)
+
+    # test simulation
+    up = updater(policy)
+    @test isapprox(simulate(RolloutSimulator(), pomdp, policy, up), 4.435, rtol=.1)
 
     # test infinite horizon pomdp
     pomdp = BabyPOMDP()
